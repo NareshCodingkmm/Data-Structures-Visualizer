@@ -1,23 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import StackVisualizer from "./StackVisualizer";
+import QueueVisualizer from "./QueueVisualizer";
+import './Visualizer.css';
 
 function App() {
+  const [selected, setSelected] = useState("stack");
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div className="app-container">
+      <h1 className="app-title">Data Structures Visualizer - Naresh Kumar Siripurapu</h1>
+      <div className="selector">
+        <label htmlFor="ds-select" className="dropdown-label">
+          Choose Data Structure:
+        </label>
+        <select
+          id="ds-select"
+          value={selected}
+          onChange={(e) => setSelected(e.target.value)}
         >
-          Learn React
-        </a>
-      </header>
+          <option value="stack">Stack</option>
+          <option value="queue">Queue</option>
+        </select>
+      </div>
+      {selected === "stack" ? <StackVisualizer /> : <QueueVisualizer />}
     </div>
   );
 }
