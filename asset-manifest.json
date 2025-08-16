@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/Data-Structures-Visualizer/static/css/main.3f937219.css",
+    "main.js": "/Data-Structures-Visualizer/static/js/main.cc5b2ae7.js",
+    "index.html": "/Data-Structures-Visualizer/index.html",
+    "main.3f937219.css.map": "/Data-Structures-Visualizer/static/css/main.3f937219.css.map",
+    "main.cc5b2ae7.js.map": "/Data-Structures-Visualizer/static/js/main.cc5b2ae7.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3f937219.css",
+    "static/js/main.cc5b2ae7.js"
+  ]
+}
