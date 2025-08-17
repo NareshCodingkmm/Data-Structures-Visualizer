@@ -523,6 +523,7 @@ body {
 }
 
 /* Mobile View (up to 600px) */
+/* Mobile View (up to 600px) */
 @media (max-width: 600px) {
   html {
     font-size: 14px; /* Slightly reduce the base font size */
@@ -539,13 +540,17 @@ body {
     align-items: stretch;
   }
 
-  /* FIX: Added styles for better mobile input usability */
+  /*
+    The definitive fix for mobile input usability.
+    !important ensures this font-size overrides all other styles,
+    preventing the auto-zoom issue on iOS.
+  */
   .controls input[type="text"],
   .controls input[type="number"] {
-    font-size: 16px; /* Prevents auto-zoom on iOS */
-    min-height: 44px; /* Ensures it's a good touch target */
-    padding: 10px 15px; /* Adds comfortable spacing */
-    box-sizing: border-box; /* Important for layout */
+    font-size: 16px !important; 
+    min-height: 44px;
+    padding: 10px 15px;
+    box-sizing: border-box;
   }
 
   .controls button {
