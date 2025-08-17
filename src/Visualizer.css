@@ -524,12 +524,24 @@ body {
 
 /* Mobile View (up to 600px) */
 @media (max-width: 600px) {
+  html {
+    font-size: 14px; /* Slightly reduce the base font size */
+    -webkit-text-size-adjust: 100%; /* Prevent iOS from auto-zooming fonts */
+    text-size-adjust: 100%;
+  }
+
   .app-container, .visualization-column, .algorithm-column {
     padding: 15px;
   }
+
   .controls {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .controls button {
+    min-height: 44px; /* Ensure buttons are easy to tap */
+    padding: 12px 20px;
   }
   
   /* --- Structure-specific mobile adjustments --- */
@@ -544,6 +556,12 @@ body {
     width: 100%;
     justify-content: flex-start;
     overflow-x: auto;
+    scroll-snap-type: x mandatory; /* Enable smooth scroll-snapping */
+    scrollbar-width: thin;
+  }
+
+  .queue-slot-container {
+    scroll-snap-align: start; /* Snap each element to the start */
   }
 
   .circular-queue-container {
