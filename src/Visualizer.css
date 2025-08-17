@@ -539,6 +539,15 @@ body {
     align-items: stretch;
   }
 
+  /* FIX: Added styles for better mobile input usability */
+  .controls input[type="text"],
+  .controls input[type="number"] {
+    font-size: 16px; /* Prevents auto-zoom on iOS */
+    min-height: 44px; /* Ensures it's a good touch target */
+    padding: 10px 15px; /* Adds comfortable spacing */
+    box-sizing: border-box; /* Important for layout */
+  }
+
   .controls button {
     min-height: 44px; /* Ensure buttons are easy to tap */
     padding: 12px 20px;
