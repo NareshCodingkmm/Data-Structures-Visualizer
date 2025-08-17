@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/Data-Structures-Visualizer/static/css/main.26695295.css",
+    "main.css": "/Data-Structures-Visualizer/static/css/main.0b1ef970.css",
     "main.js": "/Data-Structures-Visualizer/static/js/main.d5a456dd.js",
     "index.html": "/Data-Structures-Visualizer/index.html",
-    "main.26695295.css.map": "/Data-Structures-Visualizer/static/css/main.26695295.css.map",
+    "main.0b1ef970.css.map": "/Data-Structures-Visualizer/static/css/main.0b1ef970.css.map",
     "main.d5a456dd.js.map": "/Data-Structures-Visualizer/static/js/main.d5a456dd.js.map"
   },
   "entrypoints": [
-    "static/css/main.26695295.css",
+    "static/css/main.0b1ef970.css",
     "static/js/main.d5a456dd.js"
   ]
 }
