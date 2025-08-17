@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import StackVisualizer from "./StackVisualizer";
 import QueueVisualizer from "./QueueVisualizer";
+import CircularQueueVisualizer from "./CircularQueueVisualizer"; // <-- new
 import './Visualizer.css';
 
 function App() {
@@ -9,6 +10,7 @@ function App() {
   return (
     <div className="app-container">
       <h1 className="app-title">Data Structures Visualizer - Naresh Kumar Siripurapu</h1>
+
       <div className="selector">
         <label htmlFor="ds-select" className="dropdown-label">
           Choose Data Structure:
@@ -20,9 +22,15 @@ function App() {
         >
           <option value="stack">Stack</option>
           <option value="queue">Queue</option>
+          <option value="circularQueue">Circular Queue</option>
         </select>
       </div>
-      {selected === "stack" ? <StackVisualizer /> : <QueueVisualizer />}
+
+      <div className="visualizer-wrapper">
+        {selected === "stack" && <StackVisualizer />}
+        {selected === "queue" && <QueueVisualizer />}
+        {selected === "circularQueue" && <CircularQueueVisualizer />}
+      </div>
     </div>
   );
 }
