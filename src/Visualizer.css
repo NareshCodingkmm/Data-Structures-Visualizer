@@ -1,116 +1,245 @@
-/* ---------------------------- General Container ---------------------------- */
-.visualizer-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 20px;
-  font-family: Arial, sans-serif;
+/* ==========================================================================
+   1. General & Layout Styles
+   ========================================================================== */
+
+/* === Root Variables (Theme) === */
+:root {
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --background-color: #f8f9fa;
+  --surface-color: #ffffff;
+  --text-color: #212529;
+  --success-color: #28a745;
+  --danger-color: #dc3545;
+  --warning-color: #ffc107;
+  --font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  --border-radius: 8px;
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-/* ---------------------------- Visualizer Wrapper (Side by Side Layout) ---------------------------- */
-.visualizer-wrapper {
-  display: flex;
-  flex-direction: row; /* side-by-side */
-  gap: 30px;           /* space between visualization and algorithm */
-  align-items: flex-start; /* align top of both columns */
-  width: 100%;
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
 
-.visualization-column {
-  flex: 1; /* take remaining space */
+/* === App Container & Title === */
+.app-container {
+  padding: 20px;
 }
 
-.algorithm-column {
-  flex: 0 0 350px; /* fixed width */
-  border-left: 2px solid #ccc;
-  padding-left: 20px;
-}
-
-.algorithm-column h3 {
-  margin-bottom: 10px;
-}
-
-.algorithm-block {
-  margin-bottom: 20px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #f9f9f9;
-}
-
-.algorithm-block h4 {
-  margin-bottom: 8px;
-  color: #2c7be5;
-}
-
-.algorithm-step {
-  margin-bottom: 6px;
-}
-
-.algorithm-step.active {
-  background-color: #ffffcc;
-  padding: 3px 5px;
-  border-radius: 4px;
-}
-
-/* ---------------------------- App Title ---------------------------- */
 .app-title {
   text-align: center;
-  color: #2c7be5;
-  font-size: 32px;
-  font-weight: bold;
-  margin-bottom: 20px;
+  color: var(--primary-color);
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
 }
 
-/* ---------------------------- Selector / Dropdown ---------------------------- */
+/* === Data Structure Selector === */
 .selector {
-  margin: 20px 0;
   text-align: center;
+  margin-bottom: 2.5rem;
 }
 
 .dropdown-label {
-  font-size: 20px;
-  font-weight: bold;
-  margin-right: 15px;
-  color: #28a745; /* Bootstrap green */
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-right: 10px;
 }
 
 .selector select {
-  font-size: 18px;
-  padding: 8px 15px;
-  border-radius: 5px;
-  border: 1px solid #888;
+  font-size: 1rem;
+  padding: 10px 15px;
+  border-radius: var(--border-radius);
+  border: 1px solid #ced4da;
+  background-color: var(--surface-color);
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-/* ---------------------------- Controls ---------------------------- */
+.selector select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+/* === Main Layout Wrapper === */
+.visualizer-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 40px;
+  align-items: flex-start;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.visualization-column,
+.algorithm-column {
+  background-color: var(--surface-color);
+  padding: 25px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  flex-basis: 0;
+}
+
+.visualization-column {
+  flex-grow: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 320px;
+}
+
+.algorithm-column {
+  flex-grow: 2;
+  position: sticky;
+  top: 20px;
+}
+
+/* === Shared Section Titles === */
+.visualization-column h2,
+.algorithm-column h3,
+.operations-log h3 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: var(--primary-color);
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+  width: 100%;
+  text-align: center;
+}
+
+/* === Controls (Inputs & Buttons) === */
 .controls {
   display: flex;
-  gap: 10px;
+  flex-wrap: wrap;
+  gap: 15px;
   margin-bottom: 20px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
-.controls input {
-  padding: 5px 10px;
-  font-size: 16px;
+.controls label {
+  font-weight: 500;
+}
+
+.controls input[type="text"],
+.controls input[type="number"] {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ced4da;
+  border-radius: var(--border-radius);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.controls input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
 }
 
 .controls button {
-  padding: 5px 15px;
-  font-size: 16px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
+  border: none;
+  border-radius: var(--border-radius);
+  color: #fff;
+  background-color: var(--primary-color);
+  transition: background-color 0.2s, transform 0.1s;
 }
 
-/* ---------------------------- Error Message ---------------------------- */
+.controls button:hover {
+  background-color: #0056b3;
+  transform: translateY(-1px);
+}
+
+/* === Error Message === */
 .error {
-  color: red;
-  margin-bottom: 10px;
+  color: var(--danger-color);
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: var(--border-radius);
+  padding: 10px 15px;
+  margin-bottom: 20px;
+  width: 90%;
+  text-align: center;
 }
 
-/* ---------------------------- Stack Styles ---------------------------- */
+/* === Algorithm Display === */
+.algorithm-column ol {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.algorithm-column li {
+  padding: 8px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.algorithm-step.active {
+  background-color: #fff3cd;
+  font-weight: 600;
+  border-left: 4px solid var(--warning-color);
+}
+
+/* === Operations Log === */
+.operations-log {
+  margin-top: 30px;
+  width: 95%;
+}
+
+.operations-log ul {
+  list-style: none;
+  padding: 10px;
+  margin: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #dee2e6;
+  border-radius: var(--border-radius);
+  background-color: #f8f9fa;
+  font-family: "Courier New", Courier, monospace;
+}
+
+.operations-log li {
+  padding: 6px 10px;
+  border-bottom: 1px solid #e9ecef;
+}
+.operations-log li:last-child {
+  border-bottom: none;
+}
+.operations-log li.latest {
+  background-color: #fff3cd;
+}
+
+.operations-log .value { color: var(--success-color); font-weight: bold; }
+.operations-log .removed { color: var(--danger-color); font-weight: bold; }
+.operations-log .null { color: var(--secondary-color); }
+
+
+/* ==========================================================================
+   2. Data Structure Specific Styles
+   ========================================================================== */
+
+/* --- Stack Visualizer --- */
 .stack-container {
+  position: relative;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  width: 100%;
   display: flex;
-  gap: 10px;
+  justify-content: center;
   align-items: flex-end;
+  gap: 10px;
+  padding: 10px;
+  min-height: 250px;
 }
 
 .stack-indices {
@@ -120,164 +249,268 @@
 }
 
 .index-number {
-  height: 40px;
+  height: 55px;
+  margin-bottom: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
-  margin-bottom: 5px;
+  width: 25px;
+  font-family: monospace;
+  color: var(--secondary-color);
 }
 
 .stack-box {
   display: flex;
   flex-direction: column-reverse;
-  border-left: 2px solid black;
-  border-right: 2px solid black;
-  border-bottom: 2px solid black;
+  border-left: 3px solid #333;
+  border-right: 3px solid #333;
+  border-bottom: 3px solid #333;
   padding: 5px;
-  min-width: 100px;
 }
 
 .stack-element {
-  height: 40px;
-  width: 100px;
-  background-color: #80d0c7;
+  width: 70px;
+  height: 50px;
   margin-bottom: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: bold;
-  border: 1px solid #333;
-  border-top: none;
-  position: relative;
+  font-size: 1.2rem;
+  border: 1px solid #999;
+  background-color: #e9ecef;
 }
 
 .top-element {
-  background-color: #ff7f50;
+  background-color: #ffc107;
+  border-color: #e0a800;
 }
 
-.top-label {
+.stack-pointer {
   position: absolute;
-  top: -20px;
+  left: -65px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  color: white;
+  font-weight: bold;
   font-size: 14px;
-  font-weight: bold;
-  color: #ff4500;
+  background-color: var(--warning-color);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  width: 35px;
+  text-align: center;
+  transform: translateY(-50%);
+  transition: background-color 0.3s, width 0.3s; /* Smooth transition */
 }
 
-.top-variable {
-  margin-left: 8px;
-  font-size: 16px;
-  font-weight: bold;
-  color: red;
+/* FIX: New style for the pointer when the stack is empty */
+.stack-pointer.empty {
+  width: 60px;
+  left: -85px;
+  background-color: var(--secondary-color);
 }
 
-/* ---------------------------- Queue Styles ---------------------------- */
+
+/* --- Linear Queue Visualizer --- */
+
+.queue-box {
+  border-top: 3px solid #333;
+  border-bottom: 3px solid #333;
+  padding: 10px 5px; /* Provides space so the border doesn't overlap content */
+  border-radius: 5px;
+  display: inline-block; /* Makes the box wrap its content */
+}
+
 .queue-container {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px;
+  min-height: 150px;
+}
+
+.queue-pointer.empty {
+  width: 80px; /* Make wider to fit "Front: -1" text */
+  background-color: var(--secondary-color);
+}
+
+.queue-pointer.overlapped {
+  width: 25px;
+}
+
+.queue-slots-wrapper {
+  position: relative;
+  padding-bottom: 40px;
   display: flex;
   gap: 5px;
-  border-top: 2px solid black;
-  border-bottom: 2px solid black;
-  padding: 5px;
-  min-height: 50px;
-  margin-bottom: 5px;
-  justify-content: center;
-  overflow-x: auto;
 }
 
 .queue-slot-container {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 5px;
 }
 
 .queue-element {
-  width: 60px;
+  width: 70px;
   height: 50px;
-  background-color: #80c0d7;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  border: 1px solid #999;
+  background-color: #e9ecef;
+}
+
+.queue-index {
+  font-family: monospace;
+  color: var(--secondary-color);
+}
+
+.queue-pointer {
+  position: absolute;
+  bottom: 0;
+  padding: 4px 10px;
+  border-radius: 6px;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  width: 45px;
+  text-align: center;
+}
+
+
+/* --- Circular Queue Visualizer --- */
+.circular-queue-container {
+  position: relative;
+  width: 350px;
+  height: 350px;
+  margin: 40px auto;
+  border-radius: 50%;
+  border: 3px dashed var(--secondary-color);
+}
+
+.circular-queue-slot {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid #333;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  border-left: 2px solid black;
-  border-right: 2px solid black;
-  margin: 0 2px;
+  background-color: #e9ecef;
 }
 
-.queue-index {
-  margin-top: 5px;
+.circular-pointer {
+  position: absolute;
+  padding: 4px 10px;
+  border-radius: 6px;
+  color: white;
   font-weight: bold;
+  font-size: 14px;
+  transform-origin: center center;
+  will-change: transform, top, left;
+  z-index: 10;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.front-pointer-cq {
+  background-color: #17a2b8;
+}
+
+.rear-pointer-cq {
+  background-color: #fd7e14;
+}
+
+.circular-queue-container .queue-index {
+  font-family: monospace;
+  font-weight: bold;
+  color: var(--secondary-color);
   font-size: 14px;
 }
 
+/* Add this new rule for the Circular Queue's empty state pointers */
+.empty-cq-pointers {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+
+/* --- Common Styles for Queue Elements --- */
 .front-element {
-  background-color: #ffa500;
+  background-color: #17a2b8;
+  color: white;
+  border-color: #138496;
 }
 
 .rear-element {
-  background-color: #ff4500;
+  background-color: #fd7e14;
+  color: white;
+  border-color: #e66a00;
 }
 
-.front-rear {
-  margin-top: 10px;
-  font-size: 16px;
+
+/* ==========================================================================
+   3. Responsive Design
+   ========================================================================== */
+
+/* Tablet View (up to 1024px) */
+@media (max-width: 1024px) {
+  .visualizer-wrapper {
+    flex-direction: column;
+    gap: 30px;
+  }
+  .algorithm-column {
+    position: static;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .app-title {
+    font-size: 2rem;
+  }
 }
 
-.front-value {
-  color: #ffa500;
-  font-weight: bold;
-}
+/* Mobile View (up to 600px) */
+@media (max-width: 600px) {
+  .app-container, .visualization-column, .algorithm-column {
+    padding: 15px;
+  }
+  .controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  /* --- Structure-specific mobile adjustments --- */
+  .stack-element, .queue-element {
+    width: 50px;
+    height: 40px;
+    font-size: 1rem;
+  }
 
-.rear-value {
-  color: #ff4500;
-  font-weight: bold;
-}
+  .queue-slots-wrapper {
+    padding: 5px;
+    width: 100%;
+    justify-content: flex-start;
+    overflow-x: auto;
+  }
 
-.front-pointer {
-  margin-top: 5px;
-  font-size: 14px;
-  font-weight: bold;
-  color: orange;
-}
-
-.rear-pointer {
-  margin-top: 5px;
-  font-size: 14px;
-  font-weight: bold;
-  color: red;
-}
-
-/* ---------------------------- Operations Log Styles ---------------------------- */
-.operations-log ul {
-  list-style: none;
-  padding-left: 0;
-  max-height: 250px;
-  overflow-y: auto;
-}
-
-.operations-log li {
-  margin-bottom: 6px;
-  padding: 3px 5px;
-  border-radius: 4px;
-}
-
-.operations-log li.latest {
-  background-color: #ffffcc;
-}
-
-.operations-log .label {
-  font-weight: bold;
-}
-
-.operations-log .value {
-  color: green;
-  font-weight: bold;
-}
-
-.operations-log .removed {
-  color: red;
-  font-weight: bold;
-}
-
-.operations-log .null {
-  color: gray;
+  .circular-queue-container {
+    width: 280px;
+    height: 280px;
+  }
+  .circular-queue-slot {
+    width: 45px;
+    height: 45px;
+  }
 }
