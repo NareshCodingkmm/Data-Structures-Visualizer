@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import "./Visualizer.css";
 
-const QueueVisualizer = () => {
-  const [queueSize, setQueueSize] = useState(5);
-  const [queue, setQueue] = useState(Array(5).fill(null));
+const CircularQueueVisualizer = () => {
+  const [queueSize, setQueueSize] = useState(8);
+  const [queue, setQueue] = useState(Array(8).fill(null));
   const [front, setFront] = useState(-1);
   const [rear, setRear] = useState(-1);
   const [inputValue, setInputValue] = useState("");
@@ -17,21 +17,21 @@ const QueueVisualizer = () => {
   const logRef = useRef(null);
 
   const enqueueAlgorithmSteps = [
-    "Check if the queue is full (rear === n-1).",
+    "Check if the queue is full ((rear + 1) % n === front).",
     "If full, log 'Enqueue failed: Queue Overflow!' and stop.",
     "Get the element to be inserted from the input field.",
-    "Increment rear by 1.",
+    "Increment rear by 1 (rear = (rear+1) % n).",
     "Insert element at q[rear].",
     "If front === -1, set front = 0.",
   ];
 
   const dequeueAlgorithmSteps = [
-    "Check if the queue is empty (front === -1 or front > rear).",
+    "Check if the queue is empty (front === -1).",
     "If empty, log 'Dequeue failed: Queue Underflow!' and stop.",
     "Retrieve element at front.",
     "Set q[front] = null.",
-    "Increment front by 1.",
-    "If front > rear, reset front = rear = -1.",
+    "If front === rear (queue has 1 element), reset front = rear = -1.",
+    "Else, increment front by 1 (front = (front+1) % n).",
   ];
 
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -53,11 +53,14 @@ const QueueVisualizer = () => {
   };
 
   const handleEnqueue = async () => {
+    setCurrentStepEnqueue(-1); 
+    await sleep(10);
+
     for (let i = 0; i < enqueueAlgorithmSteps.length; i++) {
       setCurrentStepEnqueue(i);
-      await sleep(500);
+      await sleep(600);
 
-      if (i === 0 && rear + 1 >= queueSize) {
+      if (i === 0 && (rear + 1) % queueSize === front) {
         setError("Queue Overflow!");
         const idx = log.length;
         setLog((prev) => [
@@ -86,11 +89,11 @@ const QueueVisualizer = () => {
       }
     }
 
-    const newRear = rear + 1;
+    const newRear = front === -1 ? 0 : (rear + 1) % queueSize;
     const newQueue = [...queue];
     newQueue[newRear] = inputValue;
-    setQueue(newQueue);
     if (front === -1) setFront(0);
+    setQueue(newQueue);
     setRear(newRear);
 
     const idx = log.length;
@@ -108,7 +111,6 @@ const QueueVisualizer = () => {
         ]
       </span>,
     ]);
-
     setLatestIdx(idx);
     setInputValue("");
     setError("");
@@ -116,11 +118,14 @@ const QueueVisualizer = () => {
   };
 
   const handleDequeue = async () => {
+    setCurrentStepDequeue(-1); 
+    await sleep(10);
+
     for (let i = 0; i < dequeueAlgorithmSteps.length; i++) {
       setCurrentStepDequeue(i);
-      await sleep(500);
+      await sleep(600);
 
-      if (i === 0 && (front === -1 || front > rear)) {
+      if (i === 0 && front === -1) {
         setError("Queue Underflow!");
         const idx = log.length;
         setLog((prev) => [
@@ -139,12 +144,15 @@ const QueueVisualizer = () => {
     const dequeuedValue = newQueue[front];
     newQueue[front] = null;
 
-    let newFront = front + 1;
+    let newFront = front;
     let newRear = rear;
-    if (newFront > rear) {
+    if (front === rear) {
       newFront = -1;
       newRear = -1;
+    } else {
+      newFront = (front + 1) % queueSize;
     }
+
     setQueue(newQueue);
     setFront(newFront);
     setRear(newRear);
@@ -164,7 +172,6 @@ const QueueVisualizer = () => {
         ]
       </span>,
     ]);
-
     setLatestIdx(idx);
     setError("");
     setCurrentStepDequeue(-1);
@@ -172,30 +179,54 @@ const QueueVisualizer = () => {
 
   useEffect(() => {
     if (logRef.current) {
-      logRef.current.scrollTo({
-        top: logRef.current.scrollHeight,
-        behavior: "smooth",
-      });
+      logRef.current.scrollTop = logRef.current.scrollHeight;
     }
   }, [log]);
+  
+  const calculatePointerStyle = (index, type) => {
+    if (index === -1) return { opacity: 0, scale: 0 };
+    
+    const isOverlapped = front !== -1 && front === rear;
+    let radius = 190;
 
-  const isOverlapped = front !== -1 && front === rear;
+    if (isOverlapped) {
+      radius = type === 'front' ? 165 : 215;
+    }
+
+    const angle = (360 / queueSize) * index;
+    const rad = (angle * Math.PI) / 180;
+    const containerCenter = 175;
+    
+    const x = containerCenter + radius * Math.cos(rad);
+    const y = containerCenter + radius * Math.sin(rad);
+    const rotation = angle + 180;
+
+    return {
+      opacity: 1,
+      scale: 1,
+      left: `${x}px`,
+      top: `${y}px`,
+      transform: `translate(-50%, -50%) rotate(${rotation}deg)`,
+    };
+  };
 
   return (
-    <React.Fragment>
+    <>
       <div className="visualization-column">
-        <h2>Queue Visualizer</h2>
+        <h2>Circular Queue Visualizer</h2>
         <div className="controls">
           <label>Queue Size:</label>
           <input
             type="number"
-            min={1}
+            placeholder="Queue size"
             value={queueSize}
             onChange={handleSizeChange}
+            min={1}
           />
           <label>Value:</label>
           <input
             type="text"
+            placeholder="Value to enqueue"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
           />
@@ -205,69 +236,59 @@ const QueueVisualizer = () => {
 
         {error && <div className="error">{error}</div>}
 
-        <div className="queue-container">
-          <div className="queue-box">
-            <div className="queue-slots-wrapper">
-              {queue.map((val, idx) => (
-                <div key={idx} className="queue-slot-container">
-                  <AnimatePresence>
-                    {val !== null ? (
-                      <motion.div
-                        layout
-                        initial={{ opacity: 0, y: -50 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 50 }}
-                        transition={{ duration: 0.3 }}
-                        className={`queue-element ${
-                          idx === front ? "front-element" : ""
-                        } ${idx === rear ? "rear-element" : ""}`}
-                      >
-                        {val}
-                      </motion.div>
-                    ) : (
-                      <div className="queue-element" style={{ border: 'none' }}></div>
-                    )}
-                  </AnimatePresence>
-                  <div className="queue-index">
-                    {idx}
-                  </div>
-                </div>
-              ))}
-              
+        <div className="circular-queue-container">
+          {queue.map((val, idx) => {
+            const angle = (360 / queueSize) * idx;
+            const rad = (angle * Math.PI) / 180;
+            const radius = 130;
+            const containerCenter = 175;
+            const slotSize = 60;
+            const x = containerCenter + radius * Math.cos(rad) - (slotSize / 2);
+            const y = containerCenter + radius * Math.sin(rad) - (slotSize / 2);
+
+            return (
+              <div key={idx} style={{ position: "absolute", left: x, top: y }}>
+                <motion.div
+                  className={`circular-queue-slot ${idx === front ? "front-element" : ""} ${idx === rear ? "rear-element" : ""}`}
+                  layout
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  {val ?? ""}
+                </motion.div>
+                <div className="queue-index">{idx}</div>
+              </div>
+            );
+          })}
+          
+          {front !== -1 && (
+            <>
               <motion.div
-                className={`queue-pointer front-element ${front === -1 ? 'empty' : ''} ${isOverlapped ? 'overlapped' : ''}`}
-                animate={{
-                  left: front === -1
-                    ? '10px'
-                    : isOverlapped
-                      ? `${front * 75 + 2}px`
-                      : `${front * 75 + 10}px`,
-                  bottom: front === -1 ? '-30px' : '10px'
-                }}
-                initial={false}
-                transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+                className="circular-pointer front-pointer-cq"
+                animate={calculatePointerStyle(front, 'front')}
+                transition={{ type: "spring", stiffness: 200, damping: 20 }}
               >
-                {front === -1 ? 'Front: -1' : (isOverlapped ? 'F' : 'Front')}
+                Front
               </motion.div>
 
               <motion.div
-                className={`queue-pointer rear-element ${rear === -1 ? 'empty' : ''} ${isOverlapped ? 'overlapped' : ''}`}
-                animate={{
-                  left: rear === -1
-                    ? '110px'
-                    : isOverlapped
-                      ? `${rear * 75 + 42}px`
-                      : `${rear * 75 + 10}px`,
-                  bottom: rear === -1 ? '-30px' : '10px'
-                }}
-                initial={false}
-                transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+                className="circular-pointer rear-pointer-cq"
+                animate={calculatePointerStyle(rear, 'rear')}
+                transition={{ type: "spring", stiffness: 200, damping: 20 }}
               >
-                {rear === -1 ? 'Rear: -1' : (isOverlapped ? 'R' : 'Rear')}
+                Rear
               </motion.div>
-            </div>
-          </div>
+            </>
+          )}
         </div>
+
+        {front === -1 && (
+          <div className="empty-cq-pointers">
+            <div className="queue-pointer front-element" style={{ width: '80px', position: 'relative' }}>Front: -1</div>
+            <div className="queue-pointer rear-element" style={{ width: '80px', position: 'relative' }}>Rear: -1</div>
+          </div>
+        )}
 
         <div className="operations-log">
           <h3>Operations Log</h3>
@@ -300,8 +321,8 @@ const QueueVisualizer = () => {
           ))}
         </ol>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 
-export default QueueVisualizer;
+export default CircularQueueVisualizer;
