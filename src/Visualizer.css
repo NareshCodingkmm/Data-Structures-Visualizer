@@ -223,7 +223,51 @@ body {
 .operations-log .removed { color: var(--danger-color); font-weight: bold; }
 .operations-log .null { color: var(--secondary-color); }
 
+/* === Data Structure Selector === */
+.selector {
+  display: flex; /* Aligns label and dropdown nicely */
+  justify-content: center;
+  align-items: center;
+  gap: 15px; /* Adds space between label and dropdown */
+  margin-bottom: 2.5rem;
+}
 
+.dropdown-label {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--primary-color); /* Changed to the primary theme color */
+}
+.selector select {
+  /* --- Reset and Basic Styling --- */
+  -webkit-appearance: none; /* Remove default browser appearance */
+  appearance: none;
+  background-color: var(--surface-color);
+  border: 1px solid #ced4da;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+
+  /* --- Typography and Spacing --- */
+  font-family: var(--font-family);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-color);
+  padding: 12px 40px 12px 20px; /* Top/Bottom, Right (for arrow), Left */
+  
+  /* --- Custom Dropdown Arrow (SVG) --- */
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 16px 12px;
+
+  /* --- Transitions and Focus States --- */
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.selector select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.25);
+}
 /* ==========================================================================
    2. Data Structure Specific Styles
    ========================================================================== */
@@ -249,7 +293,7 @@ body {
 }
 
 .index-number {
-  height: 55px;
+  height: 53px;
   margin-bottom: 5px;
   display: flex;
   align-items: center;
@@ -299,10 +343,9 @@ body {
   width: 35px;
   text-align: center;
   transform: translateY(-50%);
-  transition: background-color 0.3s, width 0.3s; /* Smooth transition */
+  transition: background-color 0.3s, width 0.3s;
 }
 
-/* FIX: New style for the pointer when the stack is empty */
 .stack-pointer.empty {
   width: 60px;
   left: -85px;
@@ -311,13 +354,12 @@ body {
 
 
 /* --- Linear Queue Visualizer --- */
-
 .queue-box {
   border-top: 3px solid #333;
   border-bottom: 3px solid #333;
-  padding: 10px 5px; /* Provides space so the border doesn't overlap content */
+  padding: 10px 5px;
   border-radius: 5px;
-  display: inline-block; /* Makes the box wrap its content */
+  display: inline-block;
 }
 
 .queue-container {
@@ -331,15 +373,6 @@ body {
   gap: 5px;
   padding: 10px;
   min-height: 150px;
-}
-
-.queue-pointer.empty {
-  width: 80px; /* Make wider to fit "Front: -1" text */
-  background-color: var(--secondary-color);
-}
-
-.queue-pointer.overlapped {
-  width: 25px;
 }
 
 .queue-slots-wrapper {
@@ -376,15 +409,24 @@ body {
 
 .queue-pointer {
   position: absolute;
-  bottom: 0;
   padding: 4px 10px;
   border-radius: 6px;
   color: white;
   font-weight: bold;
   font-size: 14px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  width: 45px;
+  width: 50px;
   text-align: center;
+  transition: all 0.3s ease;
+}
+
+.queue-pointer.empty {
+  width: 80px;
+  background-color: var(--secondary-color);
+}
+
+.queue-pointer.overlapped {
+  width: 25px;
 }
 
 
@@ -439,7 +481,6 @@ body {
   font-size: 14px;
 }
 
-/* Add this new rule for the Circular Queue's empty state pointers */
 .empty-cq-pointers {
   display: flex;
   gap: 10px;
