@@ -1,38 +1,27 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* General layout for the sticky footer */
+.app-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  min-height: 100vh; /* Ensures the container takes up the full screen height */
+}
+
+/* Tells the main content to grow and push the footer down */
+.app-content {
+  flex-grow: 1;
+}
+
+/* Styling for the new footer */
+.app-footer {
+  /* Flexbox properties for perfect centering */
+  display: flex;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
+  align-items: center;
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  /* Spacing and text styles */
+  padding: 1rem;
+  margin-top: 2rem;
+  font-size: 0.9em;
+  color: #6c757d;
+  background-color: #f8f9fa;
+  border-top: 1px solid #dee2e6;
 }
